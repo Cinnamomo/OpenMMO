@@ -50,6 +50,8 @@
 mod backend;
 mod decode;
 mod encode;
+#[cfg(test)]
+mod evidence;
 mod fsm;
 mod packet;
 mod schema;

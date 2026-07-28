@@ -129,6 +129,50 @@ measurement of one channel on one codebase.
 
 ---
 
+## Validation harness / 실증 하니스
+
+**EN.** `evidence.rs` measures the claims and writes a dated report to
+`doc/evidence/sidla/`. It is `#[cfg(test)]` and `#[ignore]`, so an ordinary test
+run does not pay for it. The fuzz seed is fixed, so a third party reproduces the
+same corpus.
+
+**KO.** `evidence.rs`가 주장들을 실측하고 `doc/evidence/sidla/`에 일자별 리포트를
+기록합니다. `#[cfg(test)]` + `#[ignore]`이므로 일반 테스트 실행에는 비용이 들지
+않습니다. 퍼즈 시드가 고정되어 있어 제3자가 동일 코퍼스를 재현할 수 있습니다.
+
+```
+cargo test -p agent-client --features sidla --release \
+    sidla::evidence -- --ignored --nocapture
+```
+
+The live section is skipped unless `SIDLA_LIVE_API_KEY` is set; the key is never
+written to the report. 라이브 구간은 `SIDLA_LIVE_API_KEY` 미설정 시 생략되며, 키는
+리포트에 기록되지 않습니다.
+
+What it measures / 측정 항목:
+
+| # | Measurement / 측정 | Purpose / 목적 |
+| :--- | :--- | :--- |
+| 1 | Well-formed packets admitted / 정상 패킷 수용 | 모든 것을 거부하는 검증기가 아님을 입증 |
+| 2 | Single-field corruptions rejected / 단일 필드 손상 거부 | 거부 사유의 귀속 가능성 |
+| 3 | Random-object fuzzing / 무작위 객체 퍼징 | 잘못된 수용 0건 |
+| 4 | End-to-end fuzzing / 종단 퍼징 | 미존재 개체 도달 0건, 턴 소실 0건 |
+| 5 | Determinism / 결정론성 | 동일 입력 → 동일 출력 |
+| 6 | Token cost / 토큰 비용 | 업링크·다운링크 비교 |
+| 7 | Live provider / 실제 모델 | 실제 응답의 규격 준수 여부 |
+
+**EN.** Sections 1 and 2 exist because section 3 alone proves little: "no invalid
+packet was admitted" is satisfied by a validator that refuses everything. The
+report also records where an admitted reply was structurally sound but tactically
+poor — conformance is not quality, and the report says so.
+
+**KO.** 1·2번이 존재하는 이유는 3번만으로는 증명력이 약하기 때문입니다. "잘못된 패킷
+수용 0건"은 전부 거부하는 검증기로도 충족됩니다. 리포트는 수용된 응답이 구조적으로는
+타당하나 전술적으로 부실했던 사례도 함께 기록합니다. 규격 준수는 품질이 아니며, 리포트가
+그렇게 명시합니다.
+
+---
+
 ## Headers / 헤더 규격
 
 After the J-series message families a tactical data link uses.
