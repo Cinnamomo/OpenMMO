@@ -1,0 +1,292 @@
+{
+  "claim_coverage": [
+    {
+      "element": "Header selection and structured packet assembly",
+      "implementation": "packet.rs, wire.rs, encode.rs",
+      "status": "Implemented"
+    },
+    {
+      "element": "Masking control: required/forbidden field verification",
+      "implementation": "schema.rs `rule`, `validate`",
+      "status": "Implemented"
+    },
+    {
+      "element": "Discard on violation, fall back to default/FSM control",
+      "implementation": "fsm.rs `decide`, backend.rs `fallback`",
+      "status": "Implemented"
+    },
+    {
+      "element": "Enum/hash-only decision fields, no natural language",
+      "implementation": "packet.rs `code_enum`, integer-only deserialisation",
+      "status": "Implemented"
+    },
+    {
+      "element": "Four functional header types A/B/C/D",
+      "implementation": "packet.rs `Header`, schema.rs matrix",
+      "status": "Implemented"
+    },
+    {
+      "element": "Integer shuffling outside the inference engine",
+      "implementation": "shuffle.rs `vary`, equivalence classes only",
+      "status": "Implemented (partial)"
+    },
+    {
+      "element": "State encoder to deterministic latent coordinates (DGAE-WL)",
+      "implementation": "external provider; see README",
+      "status": "Not implemented"
+    },
+    {
+      "element": "Sub-2-bit quantised inference engine, binary/ternary modes",
+      "implementation": "external provider; see README",
+      "status": "Not implemented"
+    },
+    {
+      "element": "Temperature = 0.0 greedy decoding",
+      "implementation": "provider-side setting, not controlled here",
+      "status": "Not implemented"
+    }
+  ],
+  "determinism": {
+    "accepted_distinct": 1,
+    "accepted_repetitions": 1000,
+    "fallback_distinct": 1,
+    "fallback_repetitions": 1000,
+    "uplink_distinct": 1,
+    "uplink_repetitions": 1000
+  },
+  "environment": {
+    "commit": "787a694ea2275b2317e5581370d43ad719536df8",
+    "fuzz_seed": "0x53444c412026",
+    "live_model": "gemini-3.6-flash",
+    "os": "Linux 6.1.176-220.360.amzn2023.x86_64",
+    "timestamp_utc": "2026-07-28T15:33:29Z",
+    "toolchain": "rustc 1.92.0 (ded5c06cf 2025-12-08)"
+  },
+  "live": [
+    {
+      "input_tokens": 620,
+      "output_tokens": 34,
+      "reached_game": "[{\"message\":\"Saori! It's so good to see you!\",\"type\":\"say\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"Saori\",\"ACT\":1,\"MSG\":\"Saori! It's so good to see you!\"}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 0,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=0 self_hp=100% sta=Idle"
+    },
+    {
+      "input_tokens": 669,
+      "output_tokens": 50,
+      "reached_game": "[{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"},{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"ACT\":2}\n{\"H\":\"D\",\"SUB\":\"Mika\",\"OBJ\":8,\"TAR\":\"monster_slime_0000\"}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 1,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=1 self_hp=12% sta=Panic"
+    },
+    {
+      "input_tokens": 716,
+      "output_tokens": 25,
+      "reached_game": "[{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"ACT\":2}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 2,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=2 self_hp=100% sta=Idle"
+    },
+    {
+      "input_tokens": 765,
+      "output_tokens": 25,
+      "reached_game": "[{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"ACT\":2}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 3,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=3 self_hp=100% sta=Idle"
+    },
+    {
+      "input_tokens": 859,
+      "output_tokens": 164,
+      "reached_game": "[{\"type\":\"respawn\"}]",
+      "reply": "/reply:\n\"Reply with:\n  C = an action to take            D = an objective to adopt\"\n\nWait! Notice how in the prompt preamble:\n\"WORLD STATE reaches you as packets, not sentences:\n  A = an entity reporting itself   B = how you identify an entity\nReply with:\n  C = an action to take            D = an objective to adopt\"\n\nThis explains what A, B, C, D mean!\nA = entity reporting itself (incoming packet)\nB = identification of entity (incoming packet)\nC = action to take (outgoing packet)\nD = objective to adopt (outgoing packet)\n\nIn the EXAMPLE:\nframe in:\n  A|...\n  B|...\nreply:\n  {\"H\":\"C\",\"",
+      "respawned": true,
+      "subject_dead": true,
+      "turn": 4,
+      "unreal_target": false,
+      "violation": "malformed packet: frame contained no packet",
+      "world": "monsters=5 self_hp=0% sta=Dead"
+    },
+    {
+      "input_tokens": 1003,
+      "output_tokens": 51,
+      "reached_game": "[{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"},{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"ACT\":2}\n{\"H\":\"D\",\"SUB\":\"Mika\",\"OBJ\":8,\"TAR\":\"monster_slime_0000\"}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 5,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=8 self_hp=100% sta=Idle"
+    },
+    {
+      "input_tokens": 670,
+      "output_tokens": 51,
+      "reached_game": "[{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"},{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"ACT\":2}\n{\"H\":\"D\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"OBJ\":8}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 6,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=1 self_hp=100% sta=Idle"
+    },
+    {
+      "input_tokens": 715,
+      "output_tokens": 45,
+      "reached_game": "[{\"type\":\"move\",\"x\":-15.0,\"z\":0.0},{\"type\":\"wait\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"ACT\":4}\n{\"H\":\"D\",\"SUB\":\"Mika\",\"OBJ\":3,\"TAR\":\"Saori\"}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 7,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=2 self_hp=12% sta=Panic"
+    },
+    {
+      "input_tokens": 812,
+      "output_tokens": 51,
+      "reached_game": "[{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"},{\"monster_id\":\"monster_slime_0000\",\"type\":\"attack\"}]",
+      "reply": "{\"H\":\"C\",\"SUB\":\"Mika\",\"TAR\":\"monster_slime_0000\",\"ACT\":2}\n{\"H\":\"D\",\"SUB\":\"Mika\",\"OBJ\":8,\"TAR\":\"monster_slime_0000\"}",
+      "respawned": false,
+      "subject_dead": false,
+      "turn": 8,
+      "unreal_target": false,
+      "violation": null,
+      "world": "monsters=4 self_hp=100% sta=Idle"
+    },
+    {
+      "input_tokens": 906,
+      "output_tokens": 164,
+      "reached_game": "[{\"type\":\"respawn\"}]",
+      "reply": "integer (required)\n- `MSG`: string (optional)\n- Forbidden keys in H=C JSON object: `IFF`, `STA`, `REL`, `OBJ`, `LOC`, `HP`.\n\nSimilarly, for H=D JSON object:\n- `H`: \"D\" (required)\n- `SUB`: string (required)\n- `OBJ`: integer (required)\n- `TAR`: string (optional)\n- Forbidden keys in H=D JSON object: `IFF`, `STA`, `REL`, `ACT`, `LOC`, `HP`, `MSG`.\n\nWait, let's verify values types:\nVALUES: \"integers only — never a word where a number belongs\"\nIFF, STA, ACT, OBJ, REL, HP are integers!",
+      "respawned": true,
+      "subject_dead": true,
+      "turn": 9,
+      "unreal_target": false,
+      "violation": "malformed packet: frame contained no packet",
+      "world": "monsters=6 self_hp=0% sta=Dead"
+    }
+  ],
+  "mutation_corpus": {
+    "missed": 0,
+    "per_kind": [
+      {
+        "cases": 5000,
+        "corruption": "add a forbidden field",
+        "rejected": 5000
+      },
+      {
+        "cases": 1222,
+        "corruption": "affinity out of range",
+        "rejected": 1222
+      },
+      {
+        "cases": 985,
+        "corruption": "dialogue without ACT = Talk",
+        "rejected": 985
+      },
+      {
+        "cases": 5000,
+        "corruption": "drop a required field",
+        "rejected": 5000
+      },
+      {
+        "cases": 5000,
+        "corruption": "invented field",
+        "rejected": 5000
+      },
+      {
+        "cases": 5000,
+        "corruption": "prose in an enum field",
+        "rejected": 5000
+      },
+      {
+        "cases": 5000,
+        "corruption": "unrecognised header",
+        "rejected": 5000
+      }
+    ]
+  },
+  "pipeline_fuzz": {
+    "accepted": 733,
+    "cases": 5000,
+    "fell_back": 4267,
+    "turns_lost": 0,
+    "unreal_targets": 0,
+    "untyped_actions": 0
+  },
+  "schema_fuzz": {
+    "admitted": 14,
+    "admitted_but_invalid": 0,
+    "cases": 100000,
+    "parse_errors": 84676,
+    "rejected": 99986,
+    "violation_kinds": {
+      "DanglingPayload": 1,
+      "ForbiddenField": 1133,
+      "Malformed": 84676,
+      "MissingRequired": 14175,
+      "OutOfRange": 1
+    }
+  },
+  "tokens": {
+    "downlink": {
+      "packet": 15,
+      "prose_envelope": 62
+    },
+    "uplink": [
+      {
+        "entities": 2,
+        "prose": 44,
+        "sidla_compact": 36,
+        "sidla_json": 80
+      },
+      {
+        "entities": 5,
+        "prose": 102,
+        "sidla_compact": 88,
+        "sidla_json": 186
+      },
+      {
+        "entities": 17,
+        "prose": 330,
+        "sidla_compact": 302,
+        "sidla_json": 612
+      },
+      {
+        "entities": 65,
+        "prose": 1248,
+        "sidla_compact": 1159,
+        "sidla_json": 2321
+      },
+      {
+        "entities": 257,
+        "prose": 4910,
+        "sidla_compact": 4578,
+        "sidla_json": 9149
+      }
+    ]
+  },
+  "valid_corpus": {
+    "admitted": 20000,
+    "cases": 20000,
+    "falsely_rejected": 0
+  }
+}
